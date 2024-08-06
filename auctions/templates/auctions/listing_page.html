@@ -1,0 +1,191 @@
+{% extends "auctions/layout.html" %}
+{% load widget_tweaks %}
+
+{% block body %}
+<section class="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased">
+  <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
+    <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
+        <!--image-->
+          <div class="shrink-0 max-w-md lg:max-w-lg mx-auto">
+            <img class="w-full" src="{{listing.image.url}}" alt="" />
+          </div>
+        <!--title-->
+          <div class="mt-6 sm:mt-8 lg:mt-0">
+          <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+            {{listing.title}}
+          </h1>
+        <!--current_highest_bid (current bidding price) -->
+          <div class="mt-4 sm:items-center sm:gap-4 sm:flex">
+            <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white">
+              £{{listing.current_highest_bid}}
+            </p>
+            <!--don't touch-->
+              <div class="flex items-center gap-2 mt-2 sm:mt-0">
+                <div class="flex items-center gap-1">
+                </div>
+              </div>
+          </div>
+
+        <!--Bid/Watchlist(open) or BidClosed/Winner(closed)-->
+        <!--Buttons-->
+          <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
+            {% if listing.listing_is_open is True %}
+            <!-- left button (Bid this item)-->
+              <!-- TODO add logic if pressed, automatically up the bid equal to bid_amount value-->
+              <form action="{% url 'listing_page' listing.id %}" method="post">
+              {% csrf_token %}
+                <button
+                name="place_bid"
+                type="submit"
+                class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-blue-800 dark:text-gray-100 dark:border-blue-900 dark:hover:text-white dark:hover:bg-gray-700"
+                role="button">
+                Bid this item
+                </button>
+              </form>
+
+            <!-- Right button (add to watchlist) -->
+              <form action="{% url 'add_to_watchlist' listing.id %}" method="post">
+                {% csrf_token %} 
+                <button
+                title="submit"
+                class="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none border border-gray-300 dark:focus:ring-primary-800 flex items-center justify-center"
+                role="button"
+                type="submit">
+                <svg
+                  class="w-5 h-5 -ms-2 me-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24">
+                  <!--cart symbol-->
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"/>
+                </svg>
+                Add to watchlist
+                </button>
+              </form>
+            {% else %}
+            <!-- Left (bid is closed)-->
+              <p
+              class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-blue-800 dark:text-gray-100 dark:border-blue-900 dark:hover:text-white dark:hover:bg-gray-700"
+              role="button">
+              Bid is closed
+                </p>
+            <!-- Right button (bid winner) -->
+              <p
+              title=""
+              class="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex items-center justify-center">
+              Auction winner: {{listing.last_bidder}}
+              </p>
+            {% endif %}
+            </div>
+        <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
+
+        <!-- Description -->
+          <p class="mb-6 font-semibold text-base text-gray-500 dark:text-gray-400">
+          {{listing.description}} 
+          </p>
+        <!-- Category -->
+          <p class="font-extralight text-sm mb-2 text-gray-500 dark:text-gray-400">
+          Category: {{listing.category}} 
+            </p>
+        <!-- Close bidding/already closed button-->
+          {% if listing.seller == user %}
+          <form action="{% url 'listing_is_open' listing.id %}" method="post">
+            {% csrf_token %}
+              {% if listing.listing_is_open is True %}
+                <button type="submit" class="mt-6 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                Close the bidding
+                </button>
+              {% else %}
+                <button type="button" class="mt-6 text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-gray-500 dark:border-gray-600 dark:focus:ring-gray-700">Bidding is closed</button>
+              {% endif %}
+          {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+<!--
+    DONE
+    <h2>{{ listing.title }}</h2>
+
+    <img src="{{listing.image.url}}" alt="listing image">
+    <p>Description: {{listing.description}}</p>
+    <p>End Date: {{listing.time_date_end}}</p>
+    <p>Seller: {{listing.seller}}</p>
+    <p> X Terms and Condition: {{listing.terms_and_condition}}</p>
+    <p> X Category: {{listing.category}}</p>
+    
+    DONE
+    {% if listing.listing_is_open is True %}
+        <p>Starting Bid: {{ bids.starting_bid }}</p>
+        <p>Current Highest Bid: {{ listing.current_highest_bid }}</p>
+        <p>Buy Price: {{ bids.buy_price }}</p>
+        <p>Bidding ends until: {{ bids.bid_time }}</p>
+        <hr> 
+    {% else %}
+        <p>Current Highest Bid: {{ listing.current_highest_bid }}</p>
+        <p>Bid winner: {{bids.bidder}}
+        <hr>
+    {% endif %}
+    
+    DONE Add current listing to the user watchlist
+      {% if listing.listing_is_open is True %}
+      <form action="{% url 'add_to_watchlist' listing.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit"> Add to Watchlist </button>
+      </form>
+      {% endif %}    
+    <hr> 
+
+     TODO (see below) Form to place a bid
+      {% if listing.listing_is_open is True %}
+      <form action="{% url 'listing_page' listing.id %}" method="post">
+          {% csrf_token %}
+
+          ~~ The label of this form is located in forms.py ~~
+          {{ form.as_p }}
+          <button type="submit">Place Bid</button>
+      </form>
+      {% endif %}
+    <hr>
+
+    DONE To close or open a listing by the seller
+    {% if listing.seller == user %}
+        <form action="{% url 'listing_is_open' listing.id %}" method="post">
+        {%csrf_token%}
+            {% if listing.listing_is_open is True %}
+                <button type="submit">Close Listing</button>
+            {% else %}
+                <p>This listing is closed!</p>
+            {% endif %}
+    {% endif %}
+    <hr>
+
+    NOTE: (Temporarily ommited ) Display existing comments
+      <h3>Comments:</h3>
+      {% for comment in listing.comments.all %}
+          <p>{{ comment.comment_text }}</p>
+          <p>Comment by: {{ comment.user.username }}</p>
+          <p>Comment time: {{ comment.comment_time }}</p>
+          <hr>
+      {% empty %}
+          <p>No comments yet.</p>
+      {% endfor %}
+      ~~ Add comment ~~
+      {% if listing.listing_is_open is True %}
+          <form action="{% url 'listing_page' listing.id %}" method="post">
+              {% csrf_token %}
+                  {{comment_form.as_p}}
+                  <button type="submit">Add Comment</button>
+      {% endif %}
+    <hr>
+-->

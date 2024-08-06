@@ -1,0 +1,11 @@
+<html>
+    <head>Place Bid</head>
+    <body>
+        <h2>Place a Bid on {{ listing.title }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ bid_form.as_p }}
+            <button type="submit">Place Bid</button>
+        </form>
+    </body>
+</html>

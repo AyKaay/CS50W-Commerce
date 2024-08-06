@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "build-css": "tailwindcss  ./static/auctions/styles.css -o ./static/auctions/tw-layout.css",
+    "tailwindcss": "^3.4.4",
+    "watch": "tailwindcss i ./static/auctions/styles.css -o ./static/auctions/tw-layout.css --watch"
+  },
+  "dependencies": {
+    "flowbite": "^2.4.1"
+  }
+}

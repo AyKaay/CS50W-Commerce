@@ -1,0 +1,81 @@
+{% extends "auctions/layout.html" %}
+{% load widget_tweaks %}
+<!--
+    <head>
+        <meta charset="UTF-8" />
+        <title>Create Listing</title>
+    </head>
+    
+    <body>
+        <h1>Create Listing </h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit"></button>
+        </form>
+    </body>
+-->
+{% block body %}
+        <section class="bg-white dark:bg-gray-900">
+            <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+                <h1 class="mb-4 text-3xl font-bold text-gray-900 dark:text-white">Add a new product</h1>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                        <!--title-->
+                        <div class="sm:col-span-2">
+                            <label for="id_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item Name</label>
+                            {% render_field form.title placeholder="Item name" required="" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+
+                        </div>
+                        <!--image-->
+                        <div class="w-full">
+                            <label for="id_image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload item image</label>
+                            {% render_field form.image placeholder="Item image" required="" type="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" placeholder="Product brand" required="" %}
+                        </div>
+                        <!--starting bid-->
+                        <div class="w-full">
+                            <label for="id_starting_bid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item starting price</label>
+                            {% render_field form.starting_bid type="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="£3" required="" %}
+                        </div>
+                        <!--time_date_end-->
+                        <div class="w-full">
+                        <label for="id_time_date_end" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item bidding closing date</label>
+                            <div class="relative max-w-sm">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                  <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                  </svg>
+                                </div>
+                                {% render_field form.time_date_end attrs="datepicker" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="31/12/2024" %}
+                            </div>
+                        </div>
+                        <!--bid_amount-->
+                        <div>
+                            <label for="id_bid_amount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item Bidding amount</label>
+                            {% render_field form.bid_amount type="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="£1" required="" %}
+                        </div>
+                        <!--category-->
+                        <div>
+                            <label for="id_category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item Category</label>
+                            {% render_field form.category type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Banner" required="" %}
+                        </div>
+                        <!--buy_price-->
+                        <div>
+                            <label for="id_buy_price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item buy out price</label>
+                            {% render_field form.buy_price type="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="£12" required="" %}
+                        </div>
+                        <!--description-->
+                        <div class="sm:col-span-2">
+                            <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                            {% render_field form.description rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Your description here" %}
+                        </div>
+                    </div>
+                    <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center bg-blue-700 hover:bg-blue-800 focus:outline-none text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                        Add product
+                    </button>
+                </form>
+            </div>
+          </section>
+{% endblock %}
