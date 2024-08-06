@@ -16,10 +16,10 @@ This project is an e-commerce auction site built as part of Harvard's CS50W Web 
 
 ## Technologies Used
 
-- **Backend**: Django
+- **Backend**: Django, Python
 - **Frontend**: HTML, CSS, JavaScript
-- **Database**: SQLite (default Django database)
-- 
+- **Database**: SQLite
+
 ## Usage
 1. **Register** a new account or **log in** if you already have an account.
 2. **Create** new auction listings from your profile page.
